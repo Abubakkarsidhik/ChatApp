@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1071313650239",
+    "project_id": "chatapp-f1100",
+    "storage_bucket": "chatapp-f1100.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071313650239:android:3bc1ed44147a734505ae8a",
+        "android_client_info": {
+          "package_name": "com.example.chatwithme"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWr2yfzva9wq7Shm1JJH1D64uhMy8-agc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
