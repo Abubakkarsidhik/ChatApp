@@ -29,6 +29,7 @@ import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
 import com.example.chatwithme.presentation.chat.chatAppBar.ChatAppBar
 import com.example.chatwithme.presentation.chat.chatAppBar.ProfilePictureDialog
 import com.example.chatwithme.presentation.chat.chatInput.ChatInput
+import com.example.chatwithme.presentation.chat.chatInput.EmojiPickerView
 import com.example.chatwithme.presentation.chat.chatrow.ReceivedMessageRow
 import com.example.chatwithme.presentation.chat.chatrow.SentMessageRow
 import java.util.*
@@ -150,6 +151,9 @@ fun ChatScreenContent(
                 navController.navigate(BottomNavItem.UserList.fullRoute)
             }
         )
+
+//        ComposeEmojiPickerDemo()
+
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
@@ -183,7 +187,6 @@ fun ChatScreenContent(
 
         }
 //        ComposeEmojiPickerDemo()
-
 
 
 

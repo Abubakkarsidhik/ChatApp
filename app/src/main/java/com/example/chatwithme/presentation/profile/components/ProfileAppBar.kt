@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.chatwithme.R
+import com.example.chatwithme.presentation.auth.components.TextWithIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -21,11 +22,12 @@ fun ProfileAppBar(
     SmallTopAppBar(
         modifier = modifier.statusBarsPadding(),
         title = {
-            Image(
-                painter = painterResource(R.drawable.ic_chatwithme),
+            TextWithIcon()
+            /*Image(
+                painter = painterResource(R.drawable.icskychat),
                 contentDescription = null,
                 modifier = Modifier.size(200.dp)
-            )
+            )*/
         }
     )
 }

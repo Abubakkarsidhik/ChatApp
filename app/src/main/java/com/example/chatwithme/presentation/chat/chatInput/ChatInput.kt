@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -15,9 +16,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.emoji2.emojipicker.EmojiPickerView
+import androidx.emoji2.emojipicker.EmojiViewItem
+import androidx.emoji2.widget.EmojiEditText
 import com.example.chatwithme.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -206,11 +212,105 @@ fun ComposeEmojiPickerDemo() {
 }*/
 
 @Composable
-fun EmojiKeyboardWrapper(
-    onEmojiSelected: (String) -> Unit
-) {
+fun EmojiPickerView() {
+    var emojiViewItem by remember {
+        mutableStateOf(EmojiViewItem("😀", emptyList()))
+    }
 
-    val context = LocalContext.current
-//  EmojiKeyboard(context, onEmojiSelected)
+    Column {
+        AndroidView(
+            modifier = Modifier.fillMaxWidth(),
+            factory = { context ->
+                EmojiPickerView(context)
+            },
+            update = { emojiPickerView ->
+                // Apply settings to emojiPickerView
+                emojiPickerView.apply {
+                    emojiGridColumns = 9 // Optional: Set the number of columns
+                    emojiGridRows = 6f   // Optional: Set the number of rows
+                    setOnEmojiPickedListener { item ->
+                        emojiViewItem = item
+                    }
+                }
+            }
+        )
+        Text(text = emojiViewItem.emoji)
+    }
 }
+
+
+/*@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ComposeEmojiPickerDemo() {
+    val context = LocalContext.current
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+    )
+
+    var isModalBottomSheetVisible by remember {
+        mutableStateOf(false)
+    }
+    var selectedEmoji by remember {
+        mutableStateOf("😃")
+    }
+    var searchText by remember {
+        mutableStateOf("")
+    }
+
+    if (isModalBottomSheetVisible) {
+        ModalBottomSheet(
+            sheetState = sheetState,
+            shape = RectangleShape,
+            tonalElevation = 0.dp,
+            onDismissRequest = {
+                isModalBottomSheetVisible = false
+                searchText = ""
+            },
+            dragHandle = null,
+            windowInsets = WindowInsets(0),
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+            ) {
+                ComposeEmojiPickerBottomSheetUI(
+                    onEmojiClick = { emoji ->
+                        isModalBottomSheetVisible = false
+                        selectedEmoji = emoji.character
+                    },
+                    onEmojiLongClick = { emoji ->
+                        Toast.makeText(
+                            context,
+                            emoji.unicodeName.capitalizeWords(),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    },
+                    searchText = searchText,
+                    updateSearchText = { updatedSearchText ->
+                        searchText = updatedSearchText
+                    },
+                )
+            }
+        }
+    }
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+    ) {
+        ComposeEmojiPickerEmojiUI(
+            emojiCharacter = selectedEmoji,
+            onClick = {
+                isModalBottomSheetVisible = true
+            },
+            fontSize = 56.sp,
+        )
+    }
+}*/
+
+
+
+
 

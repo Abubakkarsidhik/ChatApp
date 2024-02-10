@@ -63,7 +63,7 @@ fun AcceptPendingRequestList(
                     Image(
                         painter = rememberAsyncImagePainter(item.userPictureUrl),
                         contentDescription = null,
-                        contentScale = ContentScale.Crop,
+                        contentScale = ContentScale.Fit,
                         modifier = Modifier
                             .background(
                                 color = Color.LightGray,
@@ -79,8 +79,9 @@ fun AcceptPendingRequestList(
                     Image(
                         imageVector = Icons.Filled.Person,
                         contentDescription = null,
-                        contentScale = ContentScale.Crop,
+                        contentScale = ContentScale.Fit,
                         modifier = Modifier
+                            .size(10.dp)
                             .background(
                                 color = Color.LightGray,
                                 shape = CircleShape
@@ -90,6 +91,7 @@ fun AcceptPendingRequestList(
                                 shape = CircleShape,
                                 color = MaterialTheme.colorScheme.primary
                             )
+
                     )
                 }
             }

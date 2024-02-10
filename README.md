@@ -1,4 +1,4 @@
-<p align="center"><img src="screenshots/chatWithMe.png" alt="Movplay"</p>
+<p align="center"><img src="screenshots/chatWithMe.png" alt="Movplay"></p>
 <p align="center"><img src="screenshots/summary.png" alt="Movplay"></p>
 
 This sample showcases:
@@ -44,30 +44,6 @@ The app is built with the Model-View-ViewModel (MVVM) is its structural design p
 - [Firebae](https://firebase.google.com/)- Google Firebase is a Google-backed application development software that enables developers to develop iOS, Android and Web apps.
 - [Timber](https://github.com/JakeWharton/timber)- A logger with a small, extensible API which provides utility on top of Android's normal Log class.
 
-
-
-|            Profile Screen            |                User Screen                |                Chat Screen                |
-| :----------------------------------: | :---------------------------------------: | :---------------------------------------: |
-| ![](screenshots/proflileScreen.png)  |      ![](screenshots/userScreen.png)      |      ![](screenshots/chatScreen.png)      |
-
-|              Auth Screen             |                 Add User                  |                
-| :----------------------------------: | :---------------------------------------: | 
-|   ![](screenshots/authScreen.png)    |       ![](screenshots/addUser.png)        |        
-
-
-|         Profile Screen Light         |             User Screen Light             |             Chat Screen Light             |
-| :----------------------------------: | :---------------------------------------: | :---------------------------------------: |
-| ![](screenshots/proflileScreenL.png) |     ![](screenshots/userScreenL.png)      |      ![](screenshots/chatScreenL.png)     |
-    
-
-
-|     User Screen Dynamic + Light      |        User Screen Dynamic + Dark         |
-| :----------------------------------: | :---------------------------------------: | 
-|  ![](screenshots/userScreenDy.png)   |     ![](screenshots/userScreenNy.png)     |      
-
-|      Chat Screen Dynamic + Light     |        Chat Screen Dynamic + Dark         |
-| :----------------------------------: | :---------------------------------------: | 
-|  ![](screenshots/chatScreenDy.png)   |     ![](screenshots/chatScreenNy.png)     |     
 
 
 

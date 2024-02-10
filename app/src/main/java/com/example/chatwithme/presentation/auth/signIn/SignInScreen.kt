@@ -82,11 +82,11 @@ fun SignInScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                Image(
+             /*   Image(
                     painter = painterResource(R.drawable.ic_chatwithme),
                     contentDescription = null
-                )
-                TextLightweight()
+                )*/
+                TextWithIcon()
 
                 Box(modifier = Modifier.padding(top = MaterialTheme.spacing.extraLarge)) {
                     LoginEmailCustomOutlinedTextField(textEmail!!, "Email", Icons.Default.Email) {
