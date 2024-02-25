@@ -42,7 +42,7 @@ fun SignInScreen(
     }
 
     //For test user information
-    var textEmail: String? by remember { mutableStateOf("") }//gimli@gmail.com
+    var textEmail: String? by remember { mutableStateOf("") }//sidhik@gmail.com
     var textPassword: String? by remember { mutableStateOf("") }//123456
 
     LaunchedEffect(key1 = Unit) {

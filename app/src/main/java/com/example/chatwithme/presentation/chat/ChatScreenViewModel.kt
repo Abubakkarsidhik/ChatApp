@@ -10,6 +10,7 @@ import com.example.chatwithme.domain.model.User
 import com.example.chatwithme.domain.usecase.chatScreen.ChatScreenUseCases
 import com.example.chatwithme.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +19,8 @@ class ChatScreenViewModel @Inject constructor(
     private val chatScreenUseCases: ChatScreenUseCases
 ) : ViewModel() {
     var opponentProfileFromFirebase = mutableStateOf(User())
+        private set
+    var messageDeleted = mutableStateOf(false)
         private set
 
     var messageInserted = mutableStateOf(false)
@@ -83,6 +86,23 @@ class ChatScreenViewModel @Inject constructor(
         }
     }
 
+    fun deleteMessageContentInFirebase(chatRoomUUID: String,messageContent: String){
+        viewModelScope.launch {
+            chatScreenUseCases.deleteMessageInFirebase(chatRoomUUID, messageContent) .collect { response->
+                when(response){
+                    is Response.Loading -> {}
+                    is Response.Success -> {
+                        messageDeleted.value = response.data
+                        println("Message -- ${messageDeleted.value}")
+                    }
+                    is Response.Error -> {
+                        println("Message Error -- ${response.message}")
+                    }
+                }
+
+            }
+        }
+    }
     fun loadOpponentProfileFromFirebase(opponentUUID: String) {
         viewModelScope.launch {
             chatScreenUseCases.opponentProfileFromFirebase(opponentUUID).collect { response ->

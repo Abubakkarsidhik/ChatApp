@@ -18,7 +18,6 @@ import androidx.navigation.NavController
 import com.example.chatwithme.core.SnackbarController
 import com.example.chatwithme.domain.model.UserStatus
 import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
-import com.example.chatwithme.presentation.chat.chatInput.EmojiPickerView
 import com.example.chatwithme.presentation.commonComponents.LogOutCustomText
 import com.example.chatwithme.presentation.profile.components.ProfileAppBar
 import com.example.chatwithme.presentation.userlist.components.AcceptPendingRequestList

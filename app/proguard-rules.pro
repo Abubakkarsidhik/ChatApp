@@ -19,17 +19,17 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--dontwarn android.os.ServiceManager*
--dontwarn com.bun.miitmdid.core.MdidSdkHelper*
--dontwarn com.bun.miitmdid.interfaces.IIdentifierListener*
--dontwarn com.bun.miitmdid.interfaces.IdSupplier*
--dontwarn com.google.firebase.iid.FirebaseInstanceId*
--dontwarn com.google.firebase.iid.InstanceIdResult*
--dontwarn com.huawei.hms.ads.identifier.AdvertisingIdClient$Info*
--dontwarn com.huawei.hms.ads.identifier.AdvertisingIdClient*
--dontwarn com.tencent.android.tpush.otherpush.OtherPushClient*
--dontwarn com.android.org.conscrypt.SSLParametersImpl*
--printconfiguration proguard-merged-config.txt
--keep class com.stripe.android.** { *; }
--dontwarn com.stripe.android.financialconnections.**
--dontwarn com.stripe.android.stripecardscan.**
+#-dontwarn android.os.ServiceManager*
+#-dontwarn com.bun.miitmdid.core.MdidSdkHelper*
+#-dontwarn com.bun.miitmdid.interfaces.IIdentifierListener*
+#-dontwarn com.bun.miitmdid.interfaces.IdSupplier*
+#-dontwarn com.google.firebase.iid.FirebaseInstanceId*
+#-dontwarn com.google.firebase.iid.InstanceIdResult*
+#-dontwarn com.huawei.hms.ads.identifier.AdvertisingIdClient$Info*
+#-dontwarn com.huawei.hms.ads.identifier.AdvertisingIdClient*
+#-dontwarn com.tencent.android.tpush.otherpush.OtherPushClient*
+#-dontwarn com.android.org.conscrypt.SSLParametersImpl*
+#-printconfiguration proguard-merged-config.txt
+#-keep class com.stripe.android.** { *; }
+#-dontwarn com.stripe.android.financialconnections.**
+#-dontwarn com.stripe.android.stripecardscan.**

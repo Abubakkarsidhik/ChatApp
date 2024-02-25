@@ -106,6 +106,7 @@ class ChatScreenRepositoryImpl @Inject constructor(
 
                         val job2 = launch {
                             snapshot.children.forEach {
+                                println("Key ${it.key}")
                                 if (it.value?.javaClass != Boolean::class.java) {
                                     val chatMessage = it.getValue(ChatMessage::class.java)
                                     if (chatMessage != null) {
@@ -151,6 +152,45 @@ class ChatScreenRepositoryImpl @Inject constructor(
             this@callbackFlow.trySendBlocking(Response.Error(e.message ?: ERROR_MESSAGE))
         }
     }
+
+    override suspend fun deleteMessageInUserFirebase(
+        chatRoomUUID: String,
+        messageUUID: String
+    ): Flow<Response<Boolean>> =
+        callbackFlow {
+            try {
+                this@callbackFlow.trySendBlocking(Response.Loading)
+
+                val databaseReference =
+                    database.getReference("Chat_Rooms").child(chatRoomUUID).child("message")
+
+                // Find the specific message node in the database using its UUID
+                val query = databaseReference.orderByKey().equalTo(messageUUID)
+                query.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (childSnapshot in snapshot.children) {
+                            // Delete the message node
+                            childSnapshot.ref.removeValue()
+                        }
+                        this@callbackFlow.trySendBlocking(Response.Success(true))
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        this@callbackFlow.trySendBlocking(Response.Error(error.message))
+                    }
+                })
+            } catch (e: Exception) {
+                this@callbackFlow.trySendBlocking(Response.Error(e.message ?: ERROR_MESSAGE))
+            }
+            awaitClose {
+                cancel()
+            }
+        }
+
+
+
+
+
 
     override suspend fun loadOpponentProfileFromFirebase(opponentUUID: String): Flow<Response<User>> =
         callbackFlow {

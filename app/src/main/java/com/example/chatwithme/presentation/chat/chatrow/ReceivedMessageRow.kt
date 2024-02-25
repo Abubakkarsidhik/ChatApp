@@ -1,12 +1,21 @@
 package com.example.chatwithme.presentation.chat.chatrow
 
+import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -14,26 +23,34 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.chatwithme.domain.model.MessageRegister
 import com.example.chatwithme.presentation.chat.chatrow.chatbubble.ChatBubbleConstraints
 import com.example.chatwithme.presentation.chat.chatrow.chatbubble.RecipientName
 import com.example.chatwithme.presentation.chat.chatrow.chatbubble.TextMessageInsideBubble
 import com.example.chatwithme.ui.theme.spacing
+import timber.log.Timber
 
 var isRecipientRegistered = true
 var recipientOriginalName = "Some user"
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ReceivedMessageRow(
-    text: String,
+    messageRegister: MessageRegister,
     opponentName: String,
     quotedMessage: String? = null,
     quotedImage: Int? = null,
     messageTime: String,
+    indexNum:Int,
+    onClick:(message:MessageRegister?,selected:Boolean)->Unit
 ) {
+    var selectedIndex = -1
+    var isLongPressed by remember { mutableStateOf(false) }
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .background(color = if (isLongPressed) Color.Cyan else Color.Transparent)
             .padding(
                 start = MaterialTheme.spacing.small,
                 end = MaterialTheme.spacing.extraLarge,
@@ -46,7 +63,18 @@ fun ReceivedMessageRow(
             modifier = Modifier
                 .clip(RoundedCornerShape(bottomEnd = 16.dp, topEnd = 16.dp, bottomStart = 16.dp))
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                .clickable { },
+                .combinedClickable(onLongClick = {
+                    isLongPressed = !isLongPressed
+                    onClick(messageRegister,isLongPressed)
+                    println("clicked Index = $messageRegister")
+
+                }, onClick = {
+                    if (isLongPressed){
+                        isLongPressed = false
+                        onClick(null,isLongPressed)
+                    }
+                    println("LLL Clicked")
+                }),
             content = {
 //                RecipientName(
 //                    name = opponentName,
@@ -76,7 +104,7 @@ fun ReceivedMessageRow(
                         end = MaterialTheme.spacing.small,
                         bottom = MaterialTheme.spacing.extraSmall
                     ),
-                    text = text,
+                    text = messageRegister.chatMessage.message,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyLarge,
                     messageStat = {

@@ -1,6 +1,7 @@
 package com.example.chatwithme.presentation.chat.chatAppBar
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.example.chatwithme.domain.model.MessageRegister
 import com.example.chatwithme.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,10 +28,13 @@ fun ChatAppBar(
     title: String = "Title",
     description: String = "Description",
     pictureUrl: String? = null,
+    isDeleteMessage:Boolean = false,
+    deleteMessage:MessageRegister? = null,
     onUserNameClick: (() -> Unit)? = null,
     onBackArrowClick: (() -> Unit)? = null,
     onUserProfilePictureClick: (() -> Unit)? = null,
     onMoreDropDownBlockUserClick: (() -> Unit)? = null,
+    deleteOnClick:()-> Unit={}
 ) {
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
@@ -95,50 +100,62 @@ fun ChatAppBar(
             }
         },
         actions = {
-            IconButton(
-                onClick = {
-                    Toast.makeText(
-                        context,
-                        "Videochat Clicked.\n(Not Available)",
-                        Toast.LENGTH_SHORT
-                    ).show()
+            AnimatedVisibility(visible = isDeleteMessage) {
+                IconButton(onClick = {
+                    deleteOnClick()
                 }) {
-                Icon(imageVector = Icons.Filled.VideoCall, contentDescription = null)
-            }
-            IconButton(
-                onClick = {
-                    Toast.makeText(
-                        context,
-                        "Voicechat Clicked.\n(Not Available)",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }) {
-                Icon(imageVector = Icons.Filled.Call, contentDescription = null)
-            }
-            IconButton(
-                onClick = {
-                    expanded = true
-                }) {
-                Icon(imageVector = Icons.Filled.MoreVert, contentDescription = null)
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }) {
-                    DropdownMenuItem(
-                        text = {
-                            Text(text = "Block User")
-                        },
-                        onClick = {
-                            onMoreDropDownBlockUserClick?.invoke()
-                        },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Filled.PriorityHigh,
-                                contentDescription = null
-                            )
-                        }
-                    )
+                    Icon(imageVector = Icons.Filled.Delete, contentDescription = null)
                 }
             }
+            AnimatedVisibility(visible = !isDeleteMessage) {
+                Row {
+                    IconButton(
+                        onClick = {
+                            Toast.makeText(
+                                context,
+                                "Videochat Clicked.\n(Not Available)",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }) {
+                        Icon(imageVector = Icons.Filled.VideoCall, contentDescription = null)
+                    }
+                    IconButton(
+                        onClick = {
+                            Toast.makeText(
+                                context,
+                                "Voicechat Clicked.\n(Not Available)",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }) {
+                        Icon(imageVector = Icons.Filled.Call, contentDescription = null)
+                    }
+                    IconButton(
+                        onClick = {
+                            expanded = true
+                        }) {
+                        Icon(imageVector = Icons.Filled.MoreVert, contentDescription = null)
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(text = "Block User")
+                                },
+                                onClick = {
+                                    onMoreDropDownBlockUserClick?.invoke()
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Filled.PriorityHigh,
+                                        contentDescription = null
+                                    )
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+
         }
     )
 }

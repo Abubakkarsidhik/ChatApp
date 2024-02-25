@@ -86,7 +86,8 @@ object AppModule {
         blockFriendToFirebase = BlockFriendToFirebase(chatScreenRepository),
         insertMessageToFirebase = InsertMessageToFirebase(chatScreenRepository),
         loadMessageFromFirebase = LoadMessageFromFirebase(chatScreenRepository),
-        opponentProfileFromFirebase = LoadOpponentProfileFromFirebase(chatScreenRepository)
+        opponentProfileFromFirebase = LoadOpponentProfileFromFirebase(chatScreenRepository),
+        deleteMessageInFirebase = DeleteMessageInFirebase(chatScreenRepository)
     )
 
     @Provides

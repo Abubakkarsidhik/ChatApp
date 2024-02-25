@@ -21,8 +21,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.emoji2.emojipicker.EmojiPickerView
-import androidx.emoji2.emojipicker.EmojiViewItem
 import androidx.emoji2.widget.EmojiEditText
 import com.example.chatwithme.ui.theme.spacing
 
@@ -34,109 +32,95 @@ internal fun ChatInput(
     onMessageChange: (String) -> Unit,
     onFocusEvent: (Boolean) -> Unit
 ) {
-
     val context = LocalContext.current
 
     var input by remember { mutableStateOf(TextFieldValue("")) }
     val textEmpty: Boolean by derivedStateOf { input.text.isEmpty() }
 
-//    val imePaddingValues = rememberInsetsPaddingValues(insets = LocalWindowInsets.current.ime)
-//    val imeBottomPadding = imePaddingValues.calculateBottomPadding().value.toInt()
-    val imePaddingValues = PaddingValues()
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = MaterialTheme.spacing.extraSmall),
-        verticalAlignment = Alignment.Bottom
-    ) {
+    var showEmojiPicker by remember { mutableStateOf(false) } // State to track if emoji picker is visible
 
-//        ChatTextField(
-//            modifier = modifier.weight(1f).focusable(true),
-//            input = input,
-//            empty = textEmpty,
-//            onValueChange = {
-//                input = it
-//            }, onFocusEvent = {
-//                onFocusEvent(it)
-//            }
-//        )
-//
-//        Spacer(modifier = Modifier.width(6.dp))
-        TextField(
+    Column(modifier = modifier) {
+        Row(
             modifier = Modifier
-                .clip(MaterialTheme.shapes.extraLarge)
-                .weight(1f)
-                .focusable(true),
-//                .padding(bottom = MaterialTheme.spacing.extraSmall),
-            value = input,
-            onValueChange = { input = it },
-            colors = TextFieldDefaults.textFieldColors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            ),
-            placeholder = {
-                Text(text = "Message")
-            },
-            leadingIcon = {
-                IconButton(onClick = {
-
-                    Toast.makeText(
-                        context,
-                        "Emoji Clicked.\n(Not Available)",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }) {
-                    Icon(imageVector = Icons.Filled.Mood, contentDescription = "Mood")
-                }
-            },
-            trailingIcon = {
-                Row() {
-                    IconButton(onClick = {
-                        Toast.makeText(
-                            context,
-                            "Attach File Clicked.\n(Not Available)",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }) {
-                        Icon(imageVector = Icons.Filled.AttachFile, contentDescription = "File")
-                    }
-                    IconButton(onClick = {
-                        Toast.makeText(
-                            context,
-                            "Camera Clicked.\n(Not Available)",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }) {
-                        Icon(imageVector = Icons.Filled.CameraAlt, contentDescription = "Camera")
-                    }
-                }
-
-            }
-
-        )
-        FloatingActionButton(
-            shape = CircleShape,
-            onClick = {
-                if (!textEmpty) {
-                    onMessageChange(input.text)
-                    input = TextFieldValue("")
-                } else {
-                    Toast.makeText(
-                        context,
-                        "Sound Recorder Clicked.\n(Not Available)",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
+                .fillMaxWidth()
+                .padding(vertical = MaterialTheme.spacing.extraSmall),
+            verticalAlignment = Alignment.Bottom
         ) {
-            Icon(
-                imageVector = if (textEmpty) Icons.Filled.Mic else Icons.Filled.Send,
-                contentDescription = null
+            TextField(
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.extraLarge)
+                    .weight(1f)
+                    .focusable(true),
+                value = input,
+                onValueChange = { input = it },
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
+                ),
+                placeholder = {
+                    Text(text = "Message")
+                },
+                leadingIcon = {
+                    IconButton(onClick = {
+                        // Toggle visibility of emoji picker
+                        showEmojiPicker = !showEmojiPicker
+                    }) {
+                        Icon(imageVector = Icons.Filled.Mood, contentDescription = "Mood")
+                    }
+                },
+                trailingIcon = {
+                    Row() {
+                        IconButton(onClick = {
+                            Toast.makeText(
+                                context,
+                                "Attach File Clicked.\n(Not Available)",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }) {
+                            Icon(imageVector = Icons.Filled.AttachFile, contentDescription = "File")
+                        }
+                        IconButton(onClick = {
+                            Toast.makeText(
+                                context,
+                                "Camera Clicked.\n(Not Available)",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }) {
+                            Icon(imageVector = Icons.Filled.CameraAlt, contentDescription = "Camera")
+                        }
+                    }
+                }
             )
+            FloatingActionButton(
+                shape = CircleShape,
+                onClick = {
+                    if (!textEmpty) {
+                        onMessageChange(input.text)
+                        input = TextFieldValue("")
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Sound Recorder Clicked.\n(Not Available)",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            ) {
+                Icon(
+                    imageVector = if (textEmpty) Icons.Filled.Mic else Icons.Filled.Send,
+                    contentDescription = null
+                )
+            }
+        }
+
+        // Show emoji picker if the state is true
+        if (showEmojiPicker) {
+//            EmojiPickerView()
         }
     }
 }
+
 
 
 /*
@@ -211,7 +195,7 @@ fun ComposeEmojiPickerDemo() {
     }
 }*/
 
-@Composable
+/*@Composable
 fun EmojiPickerView() {
     var emojiViewItem by remember {
         mutableStateOf(EmojiViewItem("😀", emptyList()))
@@ -236,7 +220,7 @@ fun EmojiPickerView() {
         )
         Text(text = emojiViewItem.emoji)
     }
-}
+}*/
 
 
 /*@OptIn(ExperimentalMaterial3Api::class)

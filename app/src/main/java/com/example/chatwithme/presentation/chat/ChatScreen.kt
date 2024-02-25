@@ -6,10 +6,12 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -29,7 +31,6 @@ import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
 import com.example.chatwithme.presentation.chat.chatAppBar.ChatAppBar
 import com.example.chatwithme.presentation.chat.chatAppBar.ProfilePictureDialog
 import com.example.chatwithme.presentation.chat.chatInput.ChatInput
-import com.example.chatwithme.presentation.chat.chatInput.EmojiPickerView
 import com.example.chatwithme.presentation.chat.chatrow.ReceivedMessageRow
 import com.example.chatwithme.presentation.chat.chatrow.SentMessageRow
 import java.util.*
@@ -62,7 +63,6 @@ fun ChatScreen(
         navController,
         keyboardController
     )
-
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -77,7 +77,12 @@ fun ChatScreenContent(
     keyboardController: SoftwareKeyboardController
 ) {
     val messages = chatViewModel.messages
-
+    var messageDeleteBool by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var deleteMessage by rememberSaveable {
+        mutableStateOf<MessageRegister?>(null)
+    }
     LaunchedEffect(key1 = Unit) {
         chatViewModel.loadOpponentProfileFromFirebase(opponentUUID)
     }
@@ -138,6 +143,9 @@ fun ChatScreenContent(
             title = "$opponentName $opponentSurname",
             description = opponentStatus.lowercase(),
             pictureUrl = opponentPictureUrl,
+            isDeleteMessage = messageDeleteBool,
+            deleteMessage = deleteMessage,
+
             onUserNameClick = {
                 Toast.makeText(context, "User Profile Clicked", Toast.LENGTH_SHORT).show()
             }, onBackArrowClick = {
@@ -150,6 +158,11 @@ fun ChatScreenContent(
                 chatViewModel.blockFriendToFirebase(registerUUID)
                 navController.navigate(BottomNavItem.UserList.fullRoute)
             }
+            , deleteOnClick = {
+                deleteMessage?.let {
+                    chatViewModel.deleteMessageContentInFirebase(it.chatMessage.profileUUID,it.chatMessage.message)
+                }
+            }
         )
 
 //        ComposeEmojiPickerDemo()
@@ -160,7 +173,8 @@ fun ChatScreenContent(
                 .fillMaxWidth(),
             state = scrollState
         ) {
-            items(messages) { message: MessageRegister ->
+
+            itemsIndexed(messages) {index, message: MessageRegister ->
                 val sdf = remember {
                     java.text.SimpleDateFormat("hh:mm", Locale.ROOT)
                 }
@@ -168,11 +182,16 @@ fun ChatScreenContent(
                 when (message.isMessageFromOpponent){
                     true -> {
                         ReceivedMessageRow(
-                            text = message.chatMessage.message,
+                            messageRegister = message,
                             opponentName = opponentName,
                             quotedMessage = null,
                             messageTime = sdf.format(message.chatMessage.date),
-                        )
+                            indexNum = index
+                        ){ clickedMessageContent,isPressed->
+                            messageDeleteBool = isPressed
+                            deleteMessage = clickedMessageContent
+                        }
+
                     }
                     false ->{
                         SentMessageRow(
@@ -187,10 +206,6 @@ fun ChatScreenContent(
 
         }
 //        ComposeEmojiPickerDemo()
-
-
-
-
         ChatInput(
             onMessageChange = { messageContent ->
                 chatViewModel.insertMessageToFirebase(

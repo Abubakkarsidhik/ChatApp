@@ -19,6 +19,10 @@ interface ChatScreenRepository {
         registerUUID: String
     ): Flow<Response<List<ChatMessage>>>
 
+    suspend fun deleteMessageInUserFirebase(
+        chatRoomUUID: String,
+        messageContent:String
+    ):Flow<Response<Boolean>>
     suspend fun loadOpponentProfileFromFirebase(opponentUUID: String): Flow<Response<User>>
     suspend fun blockFriendToFirebase(registerUUID: String): Flow<Response<Boolean>>
 }
